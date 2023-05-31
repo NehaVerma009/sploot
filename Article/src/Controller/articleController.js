@@ -21,6 +21,10 @@ const createArticle = async function(req, res){
 
      if (!isValidObjectId(userId)) return res.status(400).send({ status: false, message: "Please enter a valid  user Id" })
 
+     if(userId!=req.decodedToken.userId){
+        return res.status(400).send({status:false, message:"Userid in param and userId in requestbody are different"})
+     }
+
      if(!title)
      return res.status(400).send({status: false,message:"Provide title"})
 
@@ -53,29 +57,7 @@ let getArticles = async function (req, res) {
         let query = req.query
         
         let checkDelete = { isDeleted: false } 
-        //let objArr = ["userId", "title", "isDeleted"]
-
-       
-        // if (!Object.keys(query).every(elem => objArr.includes(elem)))
-        // return res.status(400).send({ status: false, message: "wrong query parameters present" });
-
-        // if (query.userId) 
-        //     if (!mongoose.Types.ObjectId.isValid(query.userId)) {
-        //         return res.status(400).send({ status: false, message: "Invalid userId" })
-        //     }
-        //     checkDelete.userId = query.userId
-
-
-        //     if (query.title||query.title==0) {
-        //         if(query.title.trim().length==0){
-        //             return res.status(400).send({ status: false, message: " Please give value in Param" }) 
-        //         }
-        //         checkDelete.title= query.title
-        //     }
-
-
-           
-
+            
 
         let getProducts =  await articleModel.find(checkDelete)
         if (getProducts.length == 0) {
